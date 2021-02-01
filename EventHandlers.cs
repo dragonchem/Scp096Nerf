@@ -60,7 +60,7 @@ namespace Scp096Nerf
             dDamageToBeDone = 0;
             while (bTimerEnabled)
             {
-                if (Scp096Targets.Count < 1)
+                if (Scp096Targets.Count < 1 && plugin.Config.CalmDownAfterTargetsDead)
                 {
                     ev.Scp096.EndEnrage();
                 }
