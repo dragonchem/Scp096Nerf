@@ -12,8 +12,6 @@ namespace Scp096Nerf
 {
     public class EventHandlers
     {
-        public List<Player> Scp096Targets = new List<Player>();
-
         private bool bTimerEnabled = false;
         private int iTime = 0;
         private float dDamageToBeDone = 0;
@@ -27,40 +25,40 @@ namespace Scp096Nerf
 
         public void OnAddingTarget(AddingTargetEventArgs ev)
         {
-            ev.Target.Broadcast(5, plugin.Config.TargetMessage);
+            if (plugin.Config.SendTargetMessage)
+            {
+                ev.Target.Broadcast(5, plugin.Config.TargetMessage);
+            }
             dDamageToBeDone += plugin.Config.DamagePerTarget;
-            Scp096Targets.Add(ev.Target);
         }
 
         public void OnDying(DyingEventArgs ev)
         {
             if (ev.Killer.Role == RoleType.Scp096)
             {
-                Scp096Targets.Remove(ev.Target);
                 dDamageToBeDone -= plugin.Config.DamagePerTarget;
             }
         }
 
         public void OnCalmingDown(CalmingDownEventArgs ev)
         {
-            Scp096Targets.Clear();
-            StopTimer();
+            StopDamageTimer();
             ev.Scp096.ShieldRechargeRate = plugin.Config.ShieldRechargeRate;
         }
 
         public void OnEnraging (EnragingEventArgs ev)
         {
             ev.Scp096.ShieldRechargeRate = plugin.Config.ShieldRechargeRateEnraged;
-            StartTimer(ev);
+            StartDamageTimer(ev);
         }
 
-        private async void Timer(EnragingEventArgs ev)
+        private async void DamageTimer(EnragingEventArgs ev)
         {
             iTime = plugin.Config.Tickrate;
             dDamageToBeDone = 0;
             while (bTimerEnabled)
             {
-                if (Scp096Targets.Count < 1 && plugin.Config.CalmDownAfterTargetsDead)
+                if (ev.Scp096._targets.Count < 1 && plugin.Config.CalmDownAfterTargetsDead)
                 {
                     ev.Scp096.EndEnrage();
                 }
@@ -72,7 +70,7 @@ namespace Scp096Nerf
                     }
                     else
                     {
-                        ev.Player.Health -= (dDamageToBeDone - ev.Player.AdrenalineHealth) / plugin.Config.RegularHPResistance;
+                        ev.Player.Health -= (dDamageToBeDone - ev.Player.AdrenalineHealth) / plugin.Config.RegularHpResistance;
                         ev.Player.AdrenalineHealth = 0;
                     }
                     dDamageToBeDone += plugin.Config.DamagePerSecondEnraged;
@@ -83,13 +81,13 @@ namespace Scp096Nerf
             }
         }
 
-        private void StartTimer(EnragingEventArgs ev)
+        private void StartDamageTimer(EnragingEventArgs ev)
         {
             bTimerEnabled = true;
-            Timer(ev);
+            DamageTimer(ev);
         }
 
-        private void StopTimer()
+        private void StopDamageTimer()
         {
             bTimerEnabled = false;
         }
