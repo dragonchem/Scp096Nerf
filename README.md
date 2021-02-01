@@ -4,7 +4,8 @@
 # Config
 | Key | Value type | Default value |  Description |
 | :-- | :-- | :--: | :--: |
-| is_enabled | boolean | true | Whether the plugin should be enabled. |
+| is_enabled | boolean | true | Whether the plugin should be enabled. ||
+| calm_down_after_targets_dead | boolean | true | Whether 096 should calm down after all his targets are killed. |
 | damage_per_target | float | 7.5 | The damage 098 will take per tick per target. |
 | damage_per_second_enraged | float | 0.5 | The amount by which the damage taken per tick will increase (leave at 0 for no linear increase in damage taken). |
 | regular_hp_resistance | float | 3 | The amount of resistance 098 has when it's taking non-AHP damage (for the default value: 3, 096 will only take 1/3 of the set damage in regular HP). |
