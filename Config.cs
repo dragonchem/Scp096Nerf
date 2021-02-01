@@ -7,6 +7,9 @@ namespace Scp096Nerf
     {
         public bool IsEnabled { get; set; } = true;
 
+        [Description("Whether 096 should calm down after all his targets are killed.")]
+        public bool CalmDownAfterTargetsDead { get; set; } = true;
+
         [Description("The damage 098 will take per tick per target.")]
         public float DamagePerTarget { get; set; } = 7.5f;
 

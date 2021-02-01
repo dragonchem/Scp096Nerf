@@ -60,7 +60,11 @@ namespace Scp096Nerf
             dDamageToBeDone = 0;
             while (bTimerEnabled)
             {
-                if (iTime == plugin.Config.Tickrate)
+                if (Scp096Targets.Count < 1)
+                {
+                    ev.Scp096.EndEnrage();
+                }
+                else if (iTime == plugin.Config.Tickrate)
                 {
                     if (ev.Player.AdrenalineHealth > dDamageToBeDone)
                     {
